@@ -56,13 +56,13 @@ const resolvers = {
       const { email } = args;
       if (email === undefined) return await prisma.user.findMany();
 
-      const pickedUser: User | null = await prisma.user.findOne({
+      const user: User | null = await prisma.user.findOne({
         where: {
           email
         }
       });
 
-      return pickedUser;
+      return user;
     },
     seePost: async (_: undefined, args: User) => {
       const { email } = args;
@@ -133,11 +133,11 @@ const resolvers = {
   },
   Post: {
     categories: async ({ id }: PostProps) => {
-      const category: Category[] = await prisma.post
+      const categories: Category[] = await prisma.post
         .findOne({ where: { id } })
         .categories();
 
-      return category;
+      return categories;
     }
   },
   Category: {
