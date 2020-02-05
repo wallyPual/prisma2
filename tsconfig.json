@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "/",
+    "lib": ["es2015", "es2015.promise", "esnext"],
+    "strict": true
+  },
+  "include": ["src/**/*"]
+}
