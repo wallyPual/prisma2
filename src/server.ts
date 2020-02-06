@@ -50,9 +50,21 @@ type PostProps = {
   categories: string[];
 };
 
+type UserResolver = {
+  args: User;
+};
+
+type PostResolver = {
+  args: PostProps;
+};
+
+type CategoryResolver = {
+  args: Category;
+};
+
 const resolvers = {
   Query: {
-    seeUser: async (_: undefined, args: User) => {
+    seeUser: async (_ = undefined, args: User) => {
       const { email } = args;
       if (email === undefined) return await prisma.user.findMany();
 
@@ -64,7 +76,7 @@ const resolvers = {
 
       return user;
     },
-    seePost: async (_: undefined, args: User) => {
+    seePost: async (_ = undefined, args: User) => {
       const { email } = args;
 
       const post: Post[] = await prisma.post.findMany({
@@ -77,7 +89,7 @@ const resolvers = {
 
       return post;
     },
-    seeCategories: async (_: undefined, args: Category) => {
+    seeCategories: async (_ = undefined, args: Category) => {
       const { name } = args;
 
       if (name) {
@@ -90,7 +102,7 @@ const resolvers = {
     }
   },
   Mutation: {
-    createPost: async (_: undefined, args: PostProps) => {
+    createPost: async (_ = undefined, args: PostProps) => {
       const { email, title, description, categories } = args;
       const user: User | null = await prisma.user.findOne({
         where: {
@@ -127,8 +139,18 @@ const resolvers = {
 
         return post;
       } else {
-        throw new Error("사용자를 찾지 못했습니다.");
+        throw new Error("This account is Unauthorized");
       }
+    }
+  },
+  User: {
+    posts: async ({ id }: User) => {
+      const posts: Post[] = await prisma.post.findMany({
+        where: {
+          author: { id }
+        }
+      });
+      return posts;
     }
   },
   Post: {
